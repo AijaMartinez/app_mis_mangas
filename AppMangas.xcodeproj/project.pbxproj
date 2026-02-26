@@ -53,6 +53,26 @@
 			path = AppMangasUITests;
 			sourceTree = "<group>";
 		};
+		4F288E172F4F4FCF00CBA4A3 /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4F288E192F4F500700CBA4A3 /* ViewModels */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		4F288E1A2F4F504200CBA4A3 /* Views */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4F288E1C2F4F505C00CBA4A3 /* Services */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Services;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +123,10 @@
 		4F288E102F4F495F00CBA4A3 /* AppMangas */ = {
 			isa = PBXGroup;
 			children = (
+				4F288E1C2F4F505C00CBA4A3 /* Services */,
+				4F288E1A2F4F504200CBA4A3 /* Views */,
+				4F288E192F4F500700CBA4A3 /* ViewModels */,
+				4F288E172F4F4FCF00CBA4A3 /* Models */,
 				4F288E0B2F4F495F00CBA4A3 /* AppMangas.xcdatamodeld */,
 				4F288E0C2F4F495F00CBA4A3 /* AppMangasApp.swift */,
 				4F288E0D2F4F495F00CBA4A3 /* Assets.xcassets */,
@@ -126,6 +150,12 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4F288E172F4F4FCF00CBA4A3 /* Models */,
+				4F288E192F4F500700CBA4A3 /* ViewModels */,
+				4F288E1A2F4F504200CBA4A3 /* Views */,
+				4F288E1C2F4F505C00CBA4A3 /* Services */,
 			);
 			name = AppMangas;
 			packageProductDependencies = (

@@ -10,12 +10,15 @@ import CoreData
 
 @main
 struct AppMangasApp: App {
-    let persistenceController = PersistenceController.shared
+    @StateObject private var session = SessionManager()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            if session.isLoggedIn {
+                HomeView(session: session)
+            } else{
+                LoginView(viewModel: LoginViewModel(session: session))
+            }
         }
     }
 }
