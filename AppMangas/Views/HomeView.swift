@@ -9,21 +9,13 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var session: SessionManager
+    @StateObject private var viewModel = HomeViewModel()
     
     var body: some View {
-        VStack(spacing: 30){
-            Text("Bienvenido a AppMangas")
-                .font(.largeTitle)
-            Text("Aquí podrás encontrar una lista de mangas")
-            
-            Button("Cerrar sesión"){
-                session.logout()
-            }
-            .buttonStyle(.borderedProminent)
-            
-            Spacer()
-        }
-        .padding()
+            HomeTabBar(session: session, viewModel: viewModel)
+                .onAppear {
+                    viewModel.loadHome()
+                }
     }
 }
 

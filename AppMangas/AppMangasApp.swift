@@ -14,10 +14,12 @@ struct AppMangasApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if session.isLoggedIn {
-                HomeView(session: session)
-            } else{
-                LoginView(viewModel: LoginViewModel(session: session))
+            ZStack{
+                if session.isLoggedIn {
+                    HomeView(session: session)
+                } else{
+                    LoginView(viewModel: LoginViewModel(session: session))
+                }
             }
         }
     }
