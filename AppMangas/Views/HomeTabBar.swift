@@ -18,29 +18,20 @@ struct HomeTabBar: View {
                 HomeContent(
                     bestMangas: viewModel.bestMangas,
                     shounenMangas: viewModel.shounenMangas,
-                    romanceMangas: viewModel.romanceMangas
+                    romanceMangas: viewModel.romanceMangas,
+                    shoujoMangas: viewModel.shoujoMangas,
+                    vampireMangas: viewModel.vampiresMangas,
                 )
-                .toolbar{
-                    ToolbarItem(placement: .navigationBarTrailing){
-                        Button(action: {
-                            showSearch = true
-                        }){
-                            Image(systemName: "magnifyingglass")
-                        }
-                    }
-                }
-                .navigationTitle("")
-                .navigationDestination(isPresented: $showSearch){
-                    SearchView()
-                }
+                
             }
             .tabItem {
                 Image(systemName: "house")
             }
             .tag(0)
             
-            Text("Buscar")
+            SearchView(bestManga: viewModel.bestMang)
                 .tabItem {
+                    
                     Image(systemName: "text.page.badge.magnifyingglass")
                 }
                 .tag(1)

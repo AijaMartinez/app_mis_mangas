@@ -12,6 +12,7 @@ internal import Combine
 class SearchViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var results: [Manga] = []
+    @Published var genres: [String] = []
     @Published var isLoading = false
     
     private let service = SearchService()
@@ -31,6 +32,22 @@ class SearchViewModel: ObservableObject {
             }catch{
                 print("Error en busqueda")
                 results = []
+            }
+            isLoading = false
+        }
+        
+       
+    }
+    
+    func fetchGenres(){
+        Task{
+            isLoading = true
+            do{
+                let response = try await service.getGenres()
+                genres = response
+            }catch{
+                print("Error al cargar generos")
+                genres = []
             }
             isLoading = false
         }

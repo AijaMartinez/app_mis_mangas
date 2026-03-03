@@ -12,6 +12,8 @@ struct HomeContent: View {
     let bestMangas: [Manga]
     let shounenMangas: [Manga]
     let romanceMangas: [Manga]
+    let shoujoMangas: [Manga]
+    let vampireMangas: [Manga]
     
     var body: some View {
         ScrollView {
@@ -25,12 +27,14 @@ struct HomeContent: View {
                 SectionView(title: "Best Mangas", mangas: bestMangas)
                 SectionView(title: "Shounen", mangas: shounenMangas)
                 SectionView(title: "Romance", mangas: romanceMangas)
+                SectionView(title: "Shoujo", mangas: shoujoMangas)
+                SectionView(title: "Vampire", mangas: vampireMangas)
                 
             }
             .padding()
         }
         .scrollContentBackground(.hidden)
-        .background(Color("primaryTextColor"))
+        .background(Color("BackgroundColor"))
     }
 }
 
@@ -38,5 +42,5 @@ struct HomeContent: View {
 
     HomeContent(bestMangas: [MockData.manga, MockData.manga, MockData.manga],
                 shounenMangas: [MockData.manga, MockData.manga],
-                romanceMangas: [MockData.manga])
+                romanceMangas: [MockData.manga], shoujoMangas: [MockData.manga], vampireMangas: [MockData.manga])
 }

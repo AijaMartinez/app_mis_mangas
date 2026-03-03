@@ -27,9 +27,10 @@ struct MangaCardView: View {
             
             Text(manga.title)
                 .font(.caption)
-                .lineLimit(2)
-                .frame(width: 120)
-                .foregroundStyle(Color("BackgroundColor"))
+                .lineLimit(3)
+                .frame(width: 120, height: 48, alignment: .top)
+                .multilineTextAlignment(.leading)
+                .foregroundStyle(Color("primaryTextColor"))
         }
     }
 }

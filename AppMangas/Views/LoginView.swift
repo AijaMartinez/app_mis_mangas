@@ -9,10 +9,13 @@ import SwiftUI
 
 struct LoginView: View {
     @StateObject var viewModel: LoginViewModel
+    @State private var isShowingPassword = false
+    let maxLength = 30
     
     var body: some View {
         NavigationView {
             ZStack {
+                Color("BackgroundColor").ignoresSafeArea()
                 VStack(spacing: 20){
                     Image("mnsterfondo").resizable().scaledToFill().frame(width: 300, height: 250).clipShape(Circle())
                     Text("Iniciar Sesión")
@@ -21,9 +24,39 @@ struct LoginView: View {
                         .textFieldStyle(.roundedBorder)
                         .keyboardType(.emailAddress)
                         .autocapitalization(.none)
+                        .frame(width: 380)
                     
-                    SecureField("Contraseña", text: $viewModel.password)
-                        .textFieldStyle(.roundedBorder)
+                    ZStack(alignment: .trailing){
+                        Group{
+                            if isShowingPassword{
+                                TextField("Contraseña", text: $viewModel.password).textFieldStyle(.roundedBorder)
+                                    .onChange(of: viewModel.password, initial: false){oldValue, newValue in
+                                        if newValue.count > maxLength{
+                                            viewModel.password = String(newValue.prefix(maxLength))
+                                        }
+                                    }
+                            }else{
+                                SecureField("Contraseña", text: $viewModel.password)
+                                    .textFieldStyle(.roundedBorder)
+                                    .onChange(of: viewModel.password, initial: false){oldValue, newValue in
+                                        if newValue.count > maxLength{
+                                            viewModel.password = String(newValue.prefix(maxLength))
+                                        }
+                                    }
+                            }
+                        }
+                        .padding(.trailing, 0)
+                        
+                        Button{
+                            isShowingPassword.toggle()
+                        } label: {
+                            Image(systemName: isShowingPassword ? "eye.slash" : "eye")
+                                .foregroundStyle(Color.gray)
+                        }
+                        .padding(.trailing,10)
+                    }.frame(width: 380)
+                    
+                    
                     
                     if let error =  viewModel.errorMessage{
                         Text(error)

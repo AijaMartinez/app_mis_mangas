@@ -19,7 +19,7 @@ struct SectionView: View {
             Text(title)
                 .font(.title3)
                 .bold()
-                .foregroundStyle(Color("BackgroundColor"))
+                .foregroundStyle(Color("primaryTextColor"))
             
             ScrollView(.horizontal, showsIndicators: false){
                 HStack(spacing: 15){

@@ -2,59 +2,62 @@
 //  SearchView.swift
 //  AppMangas
 //
-//  Created by Osvaldo Mercado on 27/02/26.
+//  Created by Osvaldo Mercado on 2/03/26.
 //
 
 import SwiftUI
 
 struct SearchView: View {
-    @StateObject private var viewModel = SearchViewModel()
+//    @ObservedObject var viewModel = HomeViewModel()
+    @State private var searchText = ""
+    let bestManga: [Manga]
+    @FocusState private var isSearchFocused: Bool
+   
     var body: some View {
         
-        NavigationStack{
-            
-            ZStack {
-                Color("primaryTextColor").ignoresSafeArea()
-                
-                if viewModel.isLoading{
-                    ProgressView()
-                        .tint(.white)
-                }else if viewModel.results.isEmpty{
-                    Text("Sin resultados")
-                        .foregroundStyle(Color.white)
-                }else{
-                    ScrollView{
-                        let columns = [
-                            GridItem(.flexible()),
-                            GridItem(.flexible()),
-                            GridItem(.flexible())
-                        ]
-                        
-                        LazyVGrid(columns: columns, spacing: 10){
-                            ForEach(viewModel.results){
-                                manga in MangaCardView(manga: manga)
-                            }
+        NavigationStack {
+            ScrollView{
+                VStack(spacing: 25){
+                    NavigationLink(value: "search") {
+                        HStack{
+                            Image(systemName: "magnifyingglass").foregroundStyle(Color.white)
+                            Text("Search mangas...")
+                                .foregroundStyle(Color.gray)
+                                .frame(height: 24)
+                            Spacer()
                         }
-                        .padding()
+                        .padding(10)
+                        .background(Color(.systemGray5))
+                        .clipShape(.buttonBorder)
                     }
+                    .padding()
+                    
+                    GenreSectionView()
+                    Spacer()
+                    
+                    BestMangasSectionView(mangas: bestManga)
+                
                 }
                 
+            }
+            .background(Color("BackgroundColor"))
+            .navigationDestination(for: String.self){ value in
+                if value == "search"{
+                    SearchBarView()
+                }else{
+                    MangaByGenreView(genre: value)
+                }
                 
             }
-            .navigationTitle("")
-            .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer, prompt: "Search")
-            .onSubmit(of: .search) {
-                viewModel.search()
-            }
-            .navigationBarBackButtonHidden(false)
-                
+
         }
+       
         
-        .toolbar(.hidden, for: .tabBar)
         
+       
     }
 }
 
 #Preview {
-    SearchView()
+    SearchView(bestManga: [MockData.manga])
 }
