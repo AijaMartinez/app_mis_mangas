@@ -10,6 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @StateObject var viewModel: LoginViewModel
     @State private var isShowingPassword = false
+    
     let maxLength = 30
     
     var body: some View {
@@ -76,12 +77,19 @@ struct LoginView: View {
                         .buttonStyle(.borderedProminent)
                         
                         Button(action: {
+                            
                             viewModel.register()
+                            
                         }){
                             Text("Registrarse")
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
+                        .alert("Registro Exitoso", isPresented: $viewModel.registrationSuccess){
+                            Button("OK", role: .cancel){}
+                        } message: {
+                            Text("El usuario se ha registrado correctamente")
+                        }
                     }
                     Spacer()
                 }

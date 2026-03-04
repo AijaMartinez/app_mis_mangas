@@ -39,7 +39,7 @@ class AuthService {
     
     func login(email: String, password: String) async throws -> TokenResponse{
         // Construye la url
-        guard let url = URL(string: "\(baseURL)/users/login") else { throw URLError(.badURL)}
+        guard let url = URL(string: "\(baseURL)/users/jwt/login") else { throw URLError(.badURL)}
         
         // Concatena la credenciales
         let credentials = "\(email):\(password)"
@@ -66,18 +66,5 @@ class AuthService {
         
     }
     
-    func renewToken(currentToken: String) async throws -> TokenResponse{
-        guard let url = URL(string: "\(baseURL)/users/renew") else { throw URLError(.badURL)}
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("Bearer \(currentToken)", forHTTPHeaderField: "Authorization")
-        
-        let (dataResponse, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse, 200...299 ~= httpResponse.statusCode else {
-            throw URLError(.userAuthenticationRequired)
-        }
-        return try JSONDecoder().decode(TokenResponse.self, from: dataResponse)
-    }
+
 }

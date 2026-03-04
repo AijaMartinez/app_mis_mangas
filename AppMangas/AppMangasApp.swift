@@ -17,6 +17,7 @@ struct AppMangasApp: App {
             ZStack{
                 if session.isLoggedIn {
                     HomeView(session: session)
+                        .environmentObject(session)
                 } else{
                     LoginView(viewModel: LoginViewModel(session: session))
                 }

@@ -42,7 +42,7 @@ struct HomeTabBar: View {
                 }
                 .tag(2)
             
-            Text("Perfil")
+            ProfileView()
                 .tabItem {
                     Image(systemName: "person")
                 }

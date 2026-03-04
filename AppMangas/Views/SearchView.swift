@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SearchView: View {
-//    @ObservedObject var viewModel = HomeViewModel()
     @State private var searchText = ""
     let bestManga: [Manga]
     @FocusState private var isSearchFocused: Bool
@@ -49,6 +48,7 @@ struct SearchView: View {
                 }
                 
             }
+            
 
         }
        

@@ -14,6 +14,7 @@ class LoginViewModel: ObservableObject {
     @Published var password: String = ""
     @Published var errorMessage: String?
     @Published var isLoading = false
+    @Published var registrationSuccess = false
     
     private let service = AuthService()
     @ObservedObject private var session: SessionManager
@@ -35,11 +36,15 @@ class LoginViewModel: ObservableObject {
         
 
         Task {
+            isLoading = true
+            errorMessage = nil
             do{
                 try await service.register(email: email, password: password)
+                registrationSuccess = true
             } catch{
                 errorMessage = "Error al registrar"
             }
+            isLoading = false
         }
     }
     
@@ -60,8 +65,12 @@ class LoginViewModel: ObservableObject {
             isLoading = true
             errorMessage = nil
             do{
-                let tokenResponse = try await service.login(email: email, password: password)
-                session.token = tokenResponse.token
+                let response = try await service.login(email: email, password: password)
+                
+                
+                session.token = response.token
+                
+                print("JWT:", response.token)
                 password = ""
             }catch{
                 errorMessage = "Credenciales incorrectas"

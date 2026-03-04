@@ -7,6 +7,8 @@
 
 import Foundation
 
-struct TokenResponse: Codable{
+struct TokenResponse: Codable {
     let token: String
+    let expiresIn: Int?
+    let tokenType: String?
 }

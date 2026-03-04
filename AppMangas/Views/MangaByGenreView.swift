@@ -8,13 +8,46 @@
 import SwiftUI
 
 struct MangaByGenreView: View {
+    @StateObject private var viewModel = GenreViewModel()
     let genre: String
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     var body: some View {
-        Text("Select Genre \(genre)")
-            .navigationTitle(genre)
+            ScrollView {
+                VStack(alignment: .leading) {
+
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, minHeight: 200)
+                    }else{
+                        
+                        LazyVGrid(columns: columns, spacing: 10){
+                            ForEach(viewModel.mangas){ manga in
+                                MangaCardView(manga: manga)
+                            }
+                            
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                
+            }
+            .background(Color("BackgroundColor"))
+                .onAppear() {
+                    viewModel.genre = genre
+                    viewModel.loadMangas()
+                }
+                .navigationTitle(genre)
+        
+           
+       
+        
     }
 }
 
 #Preview {
-    MangaByGenreView(genre:  "JEJE SIU")
+    MangaByGenreView( genre:  "JEJE SIU")
 }
