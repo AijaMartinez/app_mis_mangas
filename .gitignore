@@ -1,0 +1,4 @@
+
+# Write here all the files/paths you want to be ignored
+.DS_Store
+*.xcbkptlist
