@@ -21,7 +21,7 @@ struct SearchBarView: View {
                     
                 }else if viewModel.results.isEmpty{
                     Text("No search results")
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color("primaryTextColor"))
                 }else{
                     ScrollView{
                         let columns = [
@@ -34,9 +34,16 @@ struct SearchBarView: View {
                                 NavigationLink(destination: MangaDetailView(mangaId: manga.id, viewModel: viewModel)){
                                     MangaCardView(manga: manga)
                                 }
+                                .onAppear{
+                                    viewModel.loadMoreIfNeeded(currentItem: manga)
+                                }
                             }
                         }
                         .padding()
+                        
+                        if viewModel.isLoadingMore{
+                            ProgressView().foregroundStyle(Color("primaryTextColor")).padding()
+                        }
                     }
                 }
             }

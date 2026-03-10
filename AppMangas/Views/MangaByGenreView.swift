@@ -27,11 +27,19 @@ struct MangaByGenreView: View {
                                 NavigationLink(destination: MangaDetailView(mangaId: manga.id, viewModel: searchViewModel)){
                                     MangaCardView(manga: manga)
                                 }
+                                .onAppear{
+                                    viewModel.loadMoreIfNeeded(currentItem: manga)
+                                }
                             }
                             
                         }
-                        .padding(.horizontal)
+                        .padding()
                         .frame(maxWidth: .infinity)
+                        if viewModel.isLoadingMore{
+                            ProgressView().foregroundStyle(Color("primaryTextColor")).padding()
+                        }
+                       
+                        
                     }
             }
             .background(Color("BackgroundColor"))
