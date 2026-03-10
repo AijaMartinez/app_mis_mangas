@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SectionView: View {
-    
+    @ObservedObject var viewModel: SearchViewModel
     let title: String
     let mangas: [Manga]
     
@@ -24,7 +24,9 @@ struct SectionView: View {
             ScrollView(.horizontal, showsIndicators: false){
                 HStack(spacing: 15){
                     ForEach(mangas){ manga in
-                        MangaCardView(manga: manga)
+                        NavigationLink(destination: MangaDetailView(mangaId: manga.id, viewModel: viewModel)){
+                            MangaCardView(manga: manga)
+                        }
                         
                     }
                 }
@@ -35,5 +37,5 @@ struct SectionView: View {
 
 #Preview {
 
-    SectionView(title: "Best Mangas", mangas: [MockData.manga])
+    SectionView(viewModel: SearchViewModel(), title: "Best Mangas", mangas: [MockData.manga])
 }

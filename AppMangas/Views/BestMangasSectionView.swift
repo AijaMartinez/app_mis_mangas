@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct BestMangasSectionView: View {
-    
+    @ObservedObject var viewModel: SearchViewModel
     let mangas: [Manga]
     let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.adaptive(minimum: 110))
     ]
     
     var body: some View {
@@ -24,7 +22,9 @@ struct BestMangasSectionView: View {
             
             LazyVGrid(columns: columns, spacing: 10){
                     ForEach(mangas){ manga in
-                        MangaCardView(manga: manga)
+                        NavigationLink(destination: MangaDetailView(mangaId: manga.id, viewModel: viewModel)){
+                            MangaCardView(manga: manga)
+                        }
                     }
         
             }
@@ -32,5 +32,5 @@ struct BestMangasSectionView: View {
 }
 
 #Preview {
-    BestMangasSectionView(mangas: [MockData.manga])
+    BestMangasSectionView(viewModel: SearchViewModel(), mangas: [MockData.manga])
 }

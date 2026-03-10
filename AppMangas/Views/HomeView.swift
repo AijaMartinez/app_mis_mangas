@@ -12,10 +12,10 @@ struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
     
     var body: some View {
-            HomeTabBar(session: session, viewModel: viewModel)
-                .onAppear {
-                    viewModel.loadHome()
-                }
+        HomeTabBar(session: session, viewModel: viewModel)
+            .onAppear {
+                viewModel.loadHome()
+            }
     }
 }
 

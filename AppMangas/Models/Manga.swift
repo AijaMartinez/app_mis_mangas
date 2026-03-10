@@ -27,4 +27,11 @@ struct Manga: Codable, Identifiable {
         let genres: [Genre]
         let themes: [Theme]
         let demographics: [Demographic]
+    
+    enum CodingKeys: String, CodingKey{
+        case id, title, titleJapanese, titleEnglish
+        case synopsis = "sypnosis"
+        case background, score, status, chapters, volumes, startDate, endDate, mainPicture, url
+        case authors, genres, themes, demographics
+    }
 }

@@ -10,11 +10,16 @@ import CoreData
 
 @main
 struct AppMangasApp: App {
+
     @StateObject private var session = SessionManager()
+    @StateObject var networkMonitor = NetworkMonitor()
 
     var body: some Scene {
         WindowGroup {
-            ZStack{
+            ZStack {
+                GenericMessageErrorView()
+                   
+                
                 if session.isLoggedIn {
                     HomeView(session: session)
                         .environmentObject(session)
@@ -22,6 +27,7 @@ struct AppMangasApp: App {
                     LoginView(viewModel: LoginViewModel(session: session))
                 }
             }
+            .environmentObject(networkMonitor)
         }
     }
 }

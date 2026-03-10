@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeContent: View {
-    
+    @StateObject private var viewModel = SearchViewModel()
     let bestMangas: [Manga]
     let shounenMangas: [Manga]
     let romanceMangas: [Manga]
@@ -24,11 +24,11 @@ struct HomeContent: View {
                     .bold()
                     .foregroundStyle(Color(.yellow))
                 
-                SectionView(title: "Best Mangas", mangas: bestMangas)
-                SectionView(title: "Shounen", mangas: shounenMangas)
-                SectionView(title: "Romance", mangas: romanceMangas)
-                SectionView(title: "Shoujo", mangas: shoujoMangas)
-                SectionView(title: "Vampire", mangas: vampireMangas)
+                SectionView(viewModel: viewModel, title: "Best Mangas", mangas: bestMangas)
+                SectionView(viewModel: viewModel, title: "Shounen", mangas: shounenMangas)
+                SectionView(viewModel: viewModel, title: "Romance", mangas: romanceMangas)
+                SectionView(viewModel: viewModel, title: "Shoujo", mangas: shoujoMangas)
+                SectionView(viewModel: viewModel, title: "Vampire", mangas: vampireMangas)
                 
             }
             .padding()

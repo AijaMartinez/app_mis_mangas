@@ -8,44 +8,34 @@
 import SwiftUI
 
 struct GenreSectionView: View {
-    @StateObject private var viewModel = SearchViewModel()
+    @ObservedObject var viewModel: SearchViewModel
+
+    let columns = [
+        GridItem(.adaptive(minimum: 110), spacing: 15)
+    ]
 
     var body: some View {
 
-            HStack(spacing: 15){
-                let columns = [
-                    GridItem(.flexible()),
-                    GridItem(.flexible()),
-                    GridItem(.flexible()),
-                ]
-                LazyVGrid(columns: columns, spacing: 10) {
-                    ForEach(viewModel.genres.prefix(6), id: \.self){ genre in
-                        NavigationLink(value: genre) {
-                            Text(genre)
-                                .fontWidth(.condensed)
-                                .frame(width: 122)
-                                .foregroundStyle(Color("primaryTextColor"))
-                                .padding(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(.gray, lineWidth: 2 )
-                                )
-                        }
-                        
-                        
-                    }
-
-            }
-            .background(Color("BackgroundColor"))
-            .onAppear{
-                Task{
-                    viewModel.fetchGenres()
+        LazyVGrid(columns: columns, spacing: 15) {
+            ForEach(viewModel.genres.prefix(6), id: \.self) { genre in
+                
+                NavigationLink(value: genre) {
+                    Text(genre)
+                        .fontWidth(.condensed)
+                        .foregroundStyle(Color("primaryTextColor"))
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .frame(maxWidth: .infinity)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(.gray, lineWidth: 2)
+                        )
                 }
             }
         }
+        .padding(.horizontal)
     }
 }
-
 #Preview {
-    GenreSectionView()
+    GenreSectionView(viewModel: SearchViewModel())
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Theme: Codable, Identifiable{
+struct Theme: Codable, Identifiable, Hashable{
     let id: String
     let theme: String
 }

@@ -9,16 +9,14 @@ import SwiftUI
 
 struct MangaByGenreView: View {
     @StateObject private var viewModel = GenreViewModel()
+    @ObservedObject var searchViewModel: SearchViewModel
+    
     let genre: String
     let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.adaptive(minimum: 110))
     ]
     var body: some View {
             ScrollView {
-                VStack(alignment: .leading) {
-
                     if viewModel.isLoading {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
@@ -26,21 +24,24 @@ struct MangaByGenreView: View {
                         
                         LazyVGrid(columns: columns, spacing: 10){
                             ForEach(viewModel.mangas){ manga in
-                                MangaCardView(manga: manga)
+                                NavigationLink(destination: MangaDetailView(mangaId: manga.id, viewModel: searchViewModel)){
+                                    MangaCardView(manga: manga)
+                                }
                             }
                             
                         }
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity)
                     }
-                }
-                .frame(maxWidth: .infinity)
-                
             }
             .background(Color("BackgroundColor"))
-                .onAppear() {
+            .task {
+                if viewModel.mangas.isEmpty{
                     viewModel.genre = genre
                     viewModel.loadMangas()
                 }
-                .navigationTitle(genre)
+            }
+            .navigationTitle(genre)
         
            
        
@@ -49,5 +50,5 @@ struct MangaByGenreView: View {
 }
 
 #Preview {
-    MangaByGenreView( genre:  "JEJE SIU")
+    MangaByGenreView( searchViewModel: SearchViewModel(), genre:  "JEJE SIU")
 }

@@ -10,6 +10,8 @@ import SwiftUI
 struct HomeTabBar: View {
     @ObservedObject var session: SessionManager
     @ObservedObject var viewModel = HomeViewModel()
+    @StateObject var searchViewModel = SearchViewModel()
+    
     @State private var showSearch = false
     
     var body: some View {
@@ -36,7 +38,7 @@ struct HomeTabBar: View {
                 }
                 .tag(1)
             
-            Text("Bibliotecas")
+            LibraryView(searchViewModel: searchViewModel)
                 .tabItem {
                     Image(systemName: "books.vertical")
                 }
@@ -47,11 +49,10 @@ struct HomeTabBar: View {
                     Image(systemName: "person")
                 }
                 .tag(3)
-        }.tint(.orange)
-        
+        }
+        .tint(.orange)
     }
 }
-
 
 #Preview {
 
