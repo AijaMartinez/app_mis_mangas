@@ -18,6 +18,7 @@ struct GenreFilterModal: View {
                 NavigationLink(destination: MangaByGenreView(searchViewModel: viewModel, genre: genre)) {
                     Text(genre)
                 }
+                
             }
             .navigationTitle("Géneros")
             .task {

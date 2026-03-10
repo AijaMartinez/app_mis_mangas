@@ -24,6 +24,10 @@ class SearchViewModel: ObservableObject {
     @Published var selectedDemographics: String? = nil
     @Published var id: Int = 0
     @Published var selectedManga: Manga?
+    @Published var currentPage = 1
+    @Published var isLoadingMore = false
+    @Published var hasMorePages = true
+    
     
     private let service = SearchService()
     
@@ -34,10 +38,17 @@ class SearchViewModel: ObservableObject {
             return
         }
         
+        currentPage = 1
+        hasMorePages = true
+        
         Task{
             isLoading = true
             do {
-                let response = try await service.searchMangasContains(text: searchText)
+                let response = try await service.searchMangasContains(
+                    text: searchText,
+                    page: currentPage,
+                    per: 20
+                )
                 results = response.items
             } catch {
                 print("Error en busqueda")
@@ -91,66 +102,32 @@ class SearchViewModel: ObservableObject {
     }
     
     func searchWithFilters() {
-        let title = searchText.trimmingCharacters(in: .whitespaces)
-        let firstName = searchAuthorFirstName.trimmingCharacters(in: .whitespaces)
-        let lastName = searchAuthorLastName.trimmingCharacters(in: .whitespaces)
-        let genreArray = selectedGenres == nil ? nil : [selectedGenres!]
-        let themeArray = selectedThemes == nil ? nil : [selectedThemes!]
-        let demographicArray = selectedDemographics == nil ? nil : [selectedDemographics!]
-
-        if title.isEmpty && firstName.isEmpty && lastName.isEmpty && genreArray == nil && themeArray == nil
-        && demographicArray == nil{
+        
+        guard let customSearch = buildCurrentSearch() else {
             results = []
             return
         }
-
-        let customSearch = CustomSearch(
-            searchTitle: title.isEmpty ? nil : title,
-            searchAuthorFirstName: firstName.isEmpty ? nil : firstName,
-            searchAuthorLastName: lastName.isEmpty ? nil : lastName,
-            searchGenres: genreArray,
-            searchThemes: themeArray,
-            searchDemographics: demographicArray,
-            searchContains: true
-        )
-
-        Task {
-            isLoading = true
-            do {
-                let response = try await service.searchMangasAdvanced(search: customSearch)
-                results = response.items
-            } catch {
-                print("Error buscando mangas con filtros: \(error)")
-                results = []
-            }
-            isLoading = false
-        }
-    }
-    
-    func searchByGenre() {
         
-        let genre = selectedGenres
-        
-        let customSearch = CustomSearch(
-            searchTitle: nil,
-            searchAuthorFirstName:  nil,
-            searchAuthorLastName:  nil,
-            searchGenres: genre == nil ? nil: [genre!],
-            searchThemes: nil,
-            searchDemographics: nil,
-            searchContains: true
-        )
+        currentPage = 1
+        hasMorePages = true
         
         Task {
             isLoading = true
+            
             do {
-                let response = try await service.searchMangasAdvanced(search: customSearch)
-                results = response.items
-            } catch {
-                print("Error buscando por autor: \(error)")
-                results = []
+                let response = try await service.searchMangasAdvanced(
+                    search: customSearch,
+                    page: currentPage,
+                    per: 20
+                )
                 
+                results = response.items
+                
+            } catch {
+                print("Error buscando mangas con filtros")
+                results = []
             }
+            
             isLoading = false
         }
     }
@@ -167,6 +144,88 @@ class SearchViewModel: ObservableObject {
             isLoading = false
         }
         
+    }
+    
+    func loadMoreIfNeeded(currentItem: Manga){
+        
+        guard let lastItem = results.last else { return }
+        
+        if currentItem.id == lastItem.id && !isLoadingMore && hasMorePages {
+            loadMore()
+        }
+    }
+    
+    func loadMore(){
+        
+        guard !isLoadingMore && hasMorePages else { return }
+        
+        currentPage += 1
+        isLoadingMore = true
+        
+        Task{
+            do{
+                
+                if let customSearch = buildCurrentSearch() {
+                    
+                    let response = try await service.searchMangasAdvanced(
+                        search: customSearch,
+                        page: currentPage,
+                        per: 20
+                    )
+                    
+                    if response.items.isEmpty {
+                        hasMorePages = false
+                    } else {
+                        results.append(contentsOf: response.items)
+                    }
+                    
+                } else {
+                    
+                    let response = try await service.searchMangasContains(
+                        text: searchText,
+                        page: currentPage,
+                        per: 20
+                    )
+                    
+                    if response.items.isEmpty {
+                        hasMorePages = false
+                    } else {
+                        results.append(contentsOf: response.items)
+                    }
+                }
+                
+            } catch{
+                print("Error cargando más mangas")
+            }
+            
+            isLoadingMore = false
+        }
+    }
+    
+    func buildCurrentSearch() -> CustomSearch? {
+        
+        let title = searchText.trimmingCharacters(in: .whitespaces)
+        let firstName = searchAuthorFirstName.trimmingCharacters(in: .whitespaces)
+        let lastName = searchAuthorLastName.trimmingCharacters(in: .whitespaces)
+        
+        let genreArray = selectedGenres == nil ? nil : [selectedGenres!]
+        let themeArray = selectedThemes == nil ? nil : [selectedThemes!]
+        let demographicArray = selectedDemographics == nil ? nil : [selectedDemographics!]
+        
+        if title.isEmpty && firstName.isEmpty && lastName.isEmpty &&
+           genreArray == nil && themeArray == nil && demographicArray == nil {
+            return nil
+        }
+        
+        return CustomSearch(
+            searchTitle: title.isEmpty ? nil : title,
+            searchAuthorFirstName: firstName.isEmpty ? nil : firstName,
+            searchAuthorLastName: lastName.isEmpty ? nil : lastName,
+            searchGenres: genreArray,
+            searchThemes: themeArray,
+            searchDemographics: demographicArray,
+            searchContains: true
+        )
     }
     
 }

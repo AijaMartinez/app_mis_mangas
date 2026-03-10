@@ -18,7 +18,7 @@ struct ProfileView: View {
                 VStack(spacing: 20){
                     Image("mnsterfondo").resizable().scaledToFill().frame(width: 300, height: 250).clipShape(Circle())
                     if viewModel.isLoading{
-                        ProgressView().tint(.white)
+                        ProgressView().tint(Color("primaryTextColor"))
                     }else if let user = viewModel.userRes{
                         VStack(spacing: 15){
                             Text("Email: \(user.email)").foregroundStyle(Color("primaryTextColor")).bold()
