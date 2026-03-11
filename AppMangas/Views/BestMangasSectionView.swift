@@ -11,7 +11,7 @@ struct BestMangasSectionView: View {
     @ObservedObject var viewModel: SearchViewModel
     let mangas: [Manga]
     let columns = [
-        GridItem(.adaptive(minimum: 110))
+        GridItem(.adaptive(minimum: 120))
     ]
     
     var body: some View {

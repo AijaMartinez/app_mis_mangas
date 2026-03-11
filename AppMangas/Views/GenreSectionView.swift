@@ -25,7 +25,9 @@ struct GenreSectionView: View {
                         .foregroundStyle(Color("primaryTextColor"))
                         .padding(.vertical, 8)
                         .padding(.horizontal, 12)
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: 160)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
                         .overlay(
                             RoundedRectangle(cornerRadius: 16)
                                 .stroke(.gray, lineWidth: 2)
