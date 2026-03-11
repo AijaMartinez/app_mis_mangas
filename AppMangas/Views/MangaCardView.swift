@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MangaCardView: View {
     
@@ -15,22 +16,32 @@ struct MangaCardView: View {
         VStack(alignment: .leading){
             if let imageUrl = manga.mainPicture?.replacingOccurrences(of: "\"", with: ""), let url = URL(string: imageUrl){
                 
-                AsyncImage(url: url) { image in
-                    image.resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: 120, height: 170)
-                .cornerRadius(10)
+                KFImage(url)
+                    .placeholder{
+                        ProgressView()
+                    }
+                    .retry(maxCount: 3, interval: .seconds(2))
+                    .fade(duration: 0.25)
+                    .resizable()
+                    .frame(width: 120, height: 170)
+                    .scaledToFill()
+                    .clipped()
+                    .clipShape(.rect(cornerRadius: 16))
+                
+            }else{
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 170)
+                    .foregroundColor(.gray)
+                    .clipShape(.rect(cornerRadius: 10))
             }
-            
-            Text(manga.title)
-                .font(.caption)
-                .lineLimit(3)
-                .frame(width: 120, height: 48, alignment: .top)
-                .multilineTextAlignment(.leading)
-                .foregroundStyle(Color("primaryTextColor"))
+                Text(manga.title)
+                    .font(.caption)
+                    .lineLimit(3)
+                    .frame(width: 120, height: 48, alignment: .top)
+                    .multilineTextAlignment(.leading)
+                    .foregroundStyle(Color("primaryTextColor"))
         }
     }
 }

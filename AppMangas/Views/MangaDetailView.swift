@@ -48,14 +48,17 @@ struct MangaDetailView: View {
 //                                    .font(.system(size: 17, weight: .bold))
 //                                    .foregroundColor(Color("primaryTextColor"))
                                 
+                                
                                 FlowLayout(data: manga.genres, spacing: 8) { genre in
-                                    Text(genre.genre)
-                                        .font(.system(size: 17, weight: .bold))
-                                        .foregroundColor(Color("primaryTextColor"))
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 6)
-                                        .background(Color.purple.opacity(0.3))
-                                        .cornerRadius(8)
+                                    NavigationLink(destination: MangaByGenreView(searchViewModel: viewModel, genre: genre.genre)) {
+                                        Text(genre.genre)
+                                            .font(.system(size: 17, weight: .bold))
+                                            .foregroundColor(Color("primaryTextColor"))
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 6)
+                                            .background(Color.purple.opacity(0.3))
+                                            .cornerRadius(8)
+                                    }
                                 }
                                 
                                                             }
