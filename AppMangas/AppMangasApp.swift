@@ -18,14 +18,16 @@ struct AppMangasApp: App {
         WindowGroup {
             ZStack {
                 GenericMessageErrorView()
-                   
-                
+
                 if session.isLoggedIn {
                     HomeView(session: session)
                         .environmentObject(session)
                 } else{
                     LoginView(viewModel: LoginViewModel(session: session))
                 }
+            }
+            .onAppear{
+                session.checkToken()
             }
             .environmentObject(networkMonitor)
         }

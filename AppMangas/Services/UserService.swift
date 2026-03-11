@@ -24,15 +24,29 @@ class UserService{
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let http = response as? HTTPURLResponse, 200...299 ~= http.statusCode else {
+        guard let http = response as? HTTPURLResponse else {
             let errorString = String(data: data, encoding: .utf8)
             print("Server response:", errorString ?? "No body")
             throw URLError(.badServerResponse)
            
         }
+        switch http.statusCode {
+        case 200...299:
+            print("Status code:", http.statusCode)
+            return try JSONDecoder().decode(UserResponse.self, from: data)
+            
+        case 401:
+            await MainActor.run{
+                SessionManager().logout()
+            }
+            print("Status code:", http.statusCode)
+            throw URLError(.userAuthenticationRequired)
+        default:
+            throw URLError(.badServerResponse)
+        }
         
-        print("Status code:", http.statusCode)
+        
 
-        return try JSONDecoder().decode(UserResponse.self, from: data)
+       
     }
 }

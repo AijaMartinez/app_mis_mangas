@@ -68,7 +68,7 @@ class LoginViewModel: ObservableObject {
                 let response = try await service.login(email: email, password: password)
                 
                 
-                session.token = response.token
+                session.saveToken(token: response.token, expiresIn: response.expiresIn ?? 3600)
                 
                 print("JWT:", response.token)
                 password = ""
