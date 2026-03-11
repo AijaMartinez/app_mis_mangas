@@ -11,7 +11,7 @@ internal import Combine
 
 class NetworkMonitor: ObservableObject {
 
-    private var monitor: NWPathMonitor = NWPathMonitor()
+    private var monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "NetworkMonitor")
     
     @Published var isConnected: Bool = true

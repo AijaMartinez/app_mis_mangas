@@ -11,7 +11,9 @@ struct GenreSectionView: View {
     @ObservedObject var viewModel: SearchViewModel
 
     let columns = [
-        GridItem(.adaptive(minimum: 110), spacing: 15)
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
     ]
 
     var body: some View {
@@ -25,7 +27,7 @@ struct GenreSectionView: View {
                         .foregroundStyle(Color("primaryTextColor"))
                         .padding(.vertical, 8)
                         .padding(.horizontal, 12)
-                        .frame(maxWidth: 160)
+                        .frame(maxWidth: .infinity)
                         .lineLimit(1)
                         .truncationMode(.tail)
                         .overlay(
